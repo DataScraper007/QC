@@ -1,0 +1,252 @@
+{
+  "110020": {
+    "nms_mgo_city": "Delhi",
+    "nms_mgo_pincode": "110020",
+    "nms_mgo_state_code": "DL"
+  },
+  "110059": {
+    "nms_mgo_city": "Delhi",
+    "nms_mgo_pincode": "110059",
+    "nms_mgo_state_code": "DL"
+  },
+  "141001": {
+    "nms_mgo_city": "Ludhiana",
+    "nms_mgo_pincode": "141001",
+    "nms_mgo_state_code": "PB"
+  },
+  "143413": {
+    "nms_mgo_city": "Amritsar",
+    "nms_mgo_pincode": "143413",
+    "nms_mgo_state_code": "PB"
+  },
+  "226003": {
+    "nms_mgo_city": "Lucknow",
+    "nms_mgo_pincode": "226003",
+    "nms_mgo_state_code": "UP"
+  },
+  "231312": {
+    "nms_mgo_city": "Mirzapur",
+    "nms_mgo_pincode": "231312",
+    "nms_mgo_state_code": "UP"
+  },
+  "301001": {
+    "nms_mgo_city": "Alwar",
+    "nms_mgo_pincode": "301001",
+    "nms_mgo_state_code": "RJ"
+  },
+  "302017": {
+    "nms_mgo_city": "Jaipur",
+    "nms_mgo_pincode": "302017",
+    "nms_mgo_state_code": "RJ"
+  },
+  "342001": {
+    "nms_mgo_city": "Jodhpur",
+    "nms_mgo_pincode": "342001",
+    "nms_mgo_state_code": "RJ"
+  },
+  "380015": {
+    "nms_mgo_city": "Ahmedabad",
+    "nms_mgo_pincode": "380015",
+    "nms_mgo_state_code": "GJ"
+  },
+  "388355": {
+    "nms_mgo_city": "Anand",
+    "nms_mgo_pincode": "388355",
+    "nms_mgo_state_code": "GJ"
+  },
+  "400012": {
+    "nms_mgo_city": "Mumbai",
+    "nms_mgo_pincode": "400012",
+    "nms_mgo_state_code": "MH"
+  },
+  "410203": {
+    "nms_mgo_city": "Raigarh(MH)",
+    "nms_mgo_pincode": "410203",
+    "nms_mgo_state_code": "MH"
+  },
+  "411014": {
+    "nms_mgo_city": "Pune",
+    "nms_mgo_pincode": "411014",
+    "nms_mgo_state_code": "MH"
+  },
+  "431001": {
+    "nms_mgo_city": "Aurangabad",
+    "nms_mgo_pincode": "431001",
+    "nms_mgo_state_code": "MH"
+  },
+  "440013": {
+    "nms_mgo_city": "Nagpur",
+    "nms_mgo_pincode": "440013",
+    "nms_mgo_state_code": "MH"
+  },
+  "452001": {
+    "nms_mgo_city": "Indore",
+    "nms_mgo_pincode": "452001",
+    "nms_mgo_state_code": "MP"
+  },
+  "474001": {
+    "nms_mgo_city": "Gwalior",
+    "nms_mgo_pincode": "474001",
+    "nms_mgo_state_code": "MP"
+  },
+  "482002": {
+    "nms_mgo_city": "Jabalpur",
+    "nms_mgo_pincode": "482002",
+    "nms_mgo_state_code": "MP"
+  },
+  "500008": {
+    "nms_mgo_city": "K.V.Rangareddy",
+    "nms_mgo_pincode": "500008",
+    "nms_mgo_state_code": "TG"
+  },
+  "517501": {
+    "nms_mgo_city": "Chittoor",
+    "nms_mgo_pincode": "517501",
+    "nms_mgo_state_code": "AP"
+  },
+  "518002": {
+    "nms_mgo_city": "Kurnool",
+    "nms_mgo_pincode": "518002",
+    "nms_mgo_state_code": "AP"
+  },
+  "520007": {
+    "nms_mgo_city": "Krishna",
+    "nms_mgo_pincode": "520007",
+    "nms_mgo_state_code": "AP"
+  },
+  "522646": {
+    "nms_mgo_city": "Guntur",
+    "nms_mgo_pincode": "522646",
+    "nms_mgo_state_code": "AP"
+  },
+  "524002": {
+    "nms_mgo_city": "Nellore",
+    "nms_mgo_pincode": "524002",
+    "nms_mgo_state_code": "AP"
+  },
+  "530016": {
+    "nms_mgo_city": "Visakhapatnam",
+    "nms_mgo_pincode": "530016",
+    "nms_mgo_state_code": "AP"
+  },
+  "560030": {
+    "nms_mgo_city": "Bangalore",
+    "nms_mgo_pincode": "560030",
+    "nms_mgo_state_code": "KA"
+  },
+  "560037": {
+    "nms_mgo_city": "Bangalore",
+    "nms_mgo_pincode": "560037",
+    "nms_mgo_state_code": "KA"
+  },
+  "575001": {
+    "nms_mgo_city": "Dakshina Kannada",
+    "nms_mgo_pincode": "575001",
+    "nms_mgo_state_code": "KA"
+  },
+  "580003": {
+    "nms_mgo_city": "Dharwad",
+    "nms_mgo_pincode": "580003",
+    "nms_mgo_state_code": "KA"
+  },
+  "590001": {
+    "nms_mgo_city": "Belgaum",
+    "nms_mgo_pincode": "590001",
+    "nms_mgo_state_code": "KA"
+  },
+  "600031": {
+    "nms_mgo_city": "Chennai",
+    "nms_mgo_pincode": "600031",
+    "nms_mgo_state_code": "TN"
+  },
+  "631551": {
+    "nms_mgo_city": "Kanchipuram",
+    "nms_mgo_pincode": "631551",
+    "nms_mgo_state_code": "TN"
+  },
+  "638056": {
+    "nms_mgo_city": "Erode",
+    "nms_mgo_pincode": "638056",
+    "nms_mgo_state_code": "TN"
+  },
+  "641028": {
+    "nms_mgo_city": "Coimbatore",
+    "nms_mgo_pincode": "641028",
+    "nms_mgo_state_code": "TN"
+  },
+  "695013": {
+    "nms_mgo_city": "Thiruvananthapuram",
+    "nms_mgo_pincode": "695013",
+    "nms_mgo_state_code": "KL"
+  },
+  "711107": {
+    "nms_mgo_city": "Howrah",
+    "nms_mgo_pincode": "711107",
+    "nms_mgo_state_code": "WB"
+  },
+  "713212": {
+    "nms_mgo_city": "Bardhaman",
+    "nms_mgo_pincode": "713212",
+    "nms_mgo_state_code": "WB"
+  },
+  "721102": {
+    "nms_mgo_city": "West Midnapore",
+    "nms_mgo_pincode": "721102",
+    "nms_mgo_state_code": "WB"
+  },
+  "722107": {
+    "nms_mgo_city": "Bankura",
+    "nms_mgo_pincode": "722107",
+    "nms_mgo_state_code": "WB"
+  },
+  "751001": {
+    "nms_mgo_city": "Bhubaneshwar",
+    "nms_mgo_pincode": "751001",
+    "nms_mgo_state_code": "OD"
+  },
+  "752023": {
+    "nms_mgo_city": "Khorda",
+    "nms_mgo_pincode": "752023",
+    "nms_mgo_state_code": "OD"
+  },
+  "781011": {
+    "nms_mgo_city": "Kamrup",
+    "nms_mgo_pincode": "781011",
+    "nms_mgo_state_code": "AS"
+  },
+  "797112": {
+    "nms_mgo_city": "Dimapur",
+    "nms_mgo_pincode": "797112",
+    "nms_mgo_state_code": "NG"
+  },
+  "800001": {
+    "nms_mgo_city": "Patna",
+    "nms_mgo_pincode": "800001",
+    "nms_mgo_state_code": "BR"
+  },
+  "812001": {
+    "nms_mgo_city": "Bhagalpur",
+    "nms_mgo_pincode": "812001",
+    "nms_mgo_state_code": "BR"
+  },
+  "824302": {
+    "nms_mgo_city": "Aurangabad(BH)",
+    "nms_mgo_pincode": "824302",
+    "nms_mgo_state_code": "BR"
+  },
+  "828117": {
+    "nms_mgo_city": "Dhanbad",
+    "nms_mgo_pincode": "828117",
+    "nms_mgo_state_code": "JH"
+  },
+  "834002": {
+    "nms_mgo_city": "Ranchi",
+    "nms_mgo_pincode": "834002",
+    "nms_mgo_state_code": "JH"
+  },
+  "842001": {
+    "nms_mgo_city": "Muzaffarpur",
+    "nms_mgo_pincode": "842001",
+    "nms_mgo_state_code": "BR"
+  }
+}
