@@ -44,7 +44,7 @@ class AmzUpdatedSpider(scrapy.Spider):
         results = self.cursor.fetchall()
 
         for fkg_pid, amz_url in results:
-            amz_url = amz_url.replace('?fpw', '?s=nowstore')
+            amz_url = amz_url.replace('?fpw', '?s=nowstore').strip('=alm')
             meta = {
                 'fkg_pid': fkg_pid,
                 'amz_url': amz_url,
@@ -55,12 +55,13 @@ class AmzUpdatedSpider(scrapy.Spider):
                 'user_agent': 'Mozilla/5.0 (Linux; U; Android 4.3; en-us; SM-N900T Build/JSS15J) AppleWebKit/534.30 (KHTML, like Gecko) Version/16.0 Mobile Safari/534.30',
             }
             yield scrapy.Request(
-                url=amz_url,
+                url= amz_url,
                 headers=headers,
                 cookies=self.cookies,
                 meta=meta
             )
-            break  # Break here to test with a single request
+
+
 
     def parse(self, response, **kwargs):
         item = QcItem()
@@ -102,28 +103,42 @@ class AmzUpdatedSpider(scrapy.Spider):
         mrp = response.xpath(
             "//span[contains(text(),'MRP:')]/following-sibling::span/span/text() | "
             "//td[contains(text(),'M.R.P.:')]/following-sibling::td/span/span/text() | "
-            "//span[contains(text(),'M.R.P.:')]//span/text() | "
+            "//span[contains(text(),'M.R.P.:') and not(ancestor::span[@id='subscriptionPrice']) and ancestor::div[@data-feature-name='corePriceDisplay_desktop']]//span/text() | "
             "//td[contains(text(),'Bundle List Price')]/following-sibling::td/span/span[@class='a-offscreen']/text()"
         ).get()
+
         item['mrp'] = mrp.strip('₹').replace(',', '') if mrp else ''
 
-        try:
-            # price = response.xpath(
-            #     "//span[contains(@class,'buyingPrice')]/span/text() | //td[contains(text(),'Deal') or contains(text(),'Price')]/following-sibling::td/span/span/text() | //span[contains(@class,'priceToPay')]/span/text()").get(
-            #     '').strip()
-            price = response.xpath(
-                "//span[contains(@class,'buyingPrice')]/span/text() |  //td[contains(text(),'Deal') or contains(text(),'Price')]/following-sibling::td//span[@data-a-color='price']//span/text() | //span[contains(@class,'priceToPay')]/span/text()").get('').strip()
-        except:
-            price = ''
-        if price == '':
-            price = response.xpath(
-                "//span[contains(@class,'priceToPay')]//span[@class='a-price-whole']//text()").get()
-            # price = "".join(price).strip()
-            if price == None:
-                price = response.xpath('//span[@id="priceblock_ourprice"]/span/text()').get('')
-                # price = "".join(price).strip()
+        # try:
+        #     price = response.xpath(
+        #         "//span[contains(@class,'buyingPrice')]/span/text() |  //td[contains(text(),'Deal') or contains(text(),'Price')]/following-sibling::td//span[@data-a-color='price']//span/text() | //span[contains(@class,'priceToPay')]/span/text()").get('').strip()
+        # except:
+        #     price = ''
+        # if price == '':
+        #     price = response.xpath(
+        #         "//span[contains(@class,'priceToPay')]//span[@class='a-price-whole']//text()").get()
+        #     if price == None:
+        #         price = response.xpath('//span[@id="priceblock_ourprice"]/span/text()').get('')
+        #
+        # item['price'] = (price.strip('₹')).replace(',', '')
+        # Define the list of XPath expressions to try
+        xpaths = [
+            "//span[contains(@class,'buyingPrice')]/span/text()",
+            "//td[contains(text(),'Deal') or contains(text(),'Price')]/following-sibling::td//span[@data-a-color='price']//span/text()",
+            "//span[contains(@class,'priceToPay')]/span/text()",
+            "//span[contains(@class,'priceToPay')]//span[@class='a-price-whole']//text()",
+            '//span[@id="priceblock_ourprice"]/span/text()'
+        ]
+        price = ''
+        # Try each XPath expression until a non-empty value is found
+        for xpath in xpaths:
+            price = response.xpath(xpath).get(default='').strip()
+            if price:
+                break
 
-        item['price'] = (price.strip('₹')).replace(',', '')
+        # Clean the price value
+        item['price'] = price.replace('₹', '').replace(',', '') if price else ''
+
 
         discount = response.xpath(
             "//div[contains(@class,'discount-sticker')]/p//text() | "
@@ -133,15 +148,21 @@ class AmzUpdatedSpider(scrapy.Spider):
         discount = next((d.strip() for d in discount if '%' in d), '')
         item['discount'] = discount.strip('-') if discount and discount not in {'0%', '0'} else ''
 
+        #TODO : check availability
         raw_stock = response.xpath("//div[contains(@id,'availability')]/span/text()").get()
-        if raw_stock and 'in stock' in raw_stock.lower():
-            item['availability'] = True
-        else:
-            item['availability'] = False if raw_stock else response.xpath(
-                "//div[contains(@id,'buybox')]//*[contains(text(),'Buy Now')]/text()"
-            ).get() is None
+        if raw_stock == None or raw_stock.strip() == '':
+            raw_stock = response.xpath(
+                                "//div[contains(@id,'buybox')]//*[contains(text(),'Buy Now')]/text()").get()
+            if raw_stock:
+                item['availability'] = True
+            else:
+                item['availability'] = False
 
-        print(item)
+            currently_unavailable = response.xpath("//span[contains(text(), 'Currently unavailable')]/text()").get()
+            if currently_unavailable:
+                item['availability'] = False
+        # print(item)
+        yield item
 
 
 if __name__ == '__main__':

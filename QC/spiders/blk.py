@@ -23,15 +23,15 @@ class BlkSpider(scrapy.Spider):
     def __init__(self, pincode, **kwargs):
         super().__init__(**kwargs)
         self.pincode = pincode
-        self.pids = json.loads(open('D:/myProjects/2024/july/QC_SCRAPER/QC/QC/cookies/pid_picodes.json', 'r').read())[
-            str(pincode)]
+        # self.pids = json.loads(open('D:/myProjects/2024/july/QC_SCRAPER/QC/QC/cookies/pid_picodes.json', 'r').read())[
+        #     str(pincode)]
         self.cookies = \
-            json.loads(open('D:/myProjects/2024/july/QC_SCRAPER/QC/QC/cookies/blinkit_cookies.json', 'r').read())[
+            json.loads(open(r'C:\Users\Admin\PycharmProjects\QC\QC\cookies\blinkit_cookies.json', 'r').read())[
                 str(pincode)]
         self.con = pymysql.connect(host=db.db_host, user=db.db_user, password=db.db_password, database=db.db_name)
         self.cursor = self.con.cursor()
 
-        self.page_save_pdp = f'D:/pankaj_page_save/{db.delivery_date}/blk/HTMLS/'
+        # self.page_save_pdp = f'D:/pankaj_page_save/{db.delivery_date}/blk/HTMLS/'
 
     def start_requests(self):
         self.cursor.execute(
@@ -85,15 +85,15 @@ class BlkSpider(scrapy.Spider):
                 cookies=cookies,
                 meta=meta
             )
-            # break
+            break
 
     def parse(self, response, **kwargs):
 
-        if not os.path.exists(self.page_save_pdp):
-            os.makedirs(self.page_save_pdp)
-        # hash_id = hashlib.sha256(page_name.encode()).hexdigest()
-        open(self.page_save_pdp + response.meta['fkg_pid'] + self.pincode + ".html", "w", encoding="utf-8").write(
-            response.text)
+        # if not os.path.exists(self.page_save_pdp):
+        #     os.makedirs(self.page_save_pdp)
+        # # hash_id = hashlib.sha256(page_name.encode()).hexdigest()
+        # open(self.page_save_pdp + response.meta['fkg_pid'] + self.pincode + ".html", "w", encoding="utf-8").write(
+        #     response.text)
 
         print()
         item = QcItem()
@@ -135,4 +135,4 @@ class BlkSpider(scrapy.Spider):
 
 
 if __name__ == '__main__':
-    execute(f"scrapy crawl blk -a pincode=110059 -s CONCURRENT_REQUESTS=1".split())
+    execute(f"scrapy crawl blk -a pincode=110020 -s CONCURRENT_REQUESTS=1".split())
