@@ -6,7 +6,6 @@ db_user = 'root'
 db_password = 'actowiz'
 db_port = 3306
 
-
 today = datetime.now(pytz.timezone('Asia/Calcutta'))
 delivery_date = str(datetime.today().strftime("%Y%m%d"))
 

@@ -1,6 +1,6 @@
+import html
 import json
 import os
-
 import QC.db_config as db
 import pymysql
 import scrapy
@@ -13,115 +13,126 @@ class FkgSpider(scrapy.Spider):
     is_debug = False
     debug_pid = "ARDFA6WQ8GP9KSV8"
 
-    def __init__(self, pincode, **kwargs):
-        super().__init__(**kwargs)
-        self.pincode = pincode
-        self.pids = json.loads(open('D:/myProjects/2024/july/QC_SCRAPER/QC/QC/cookies/pid_picodes.json', 'r').read())[str(pincode)]
-        self.cookies = json.loads(open('D:/myProjects/2024/july/QC_SCRAPER/QC/QC/cookies/flipkart_cookies.json', 'r').read())[str(pincode)]
+    def __init__(self, start_id, end_id):
+        super().__init__()
+        self.start_id = start_id
+        self.end_id = end_id
         self.con = pymysql.connect(host=db.db_host, user=db.db_user, password=db.db_password)
         self.cursor = self.con.cursor()
-
-        self.page_save_pdp = f'D:/pankaj_page_save/{db.delivery_date}/fkg/HTMLS/'
-
+        self.input_table = 'mapped_fkg_input'
+        # self.page_save_pdp = f'D:/pankaj_page_save/{db.delivery_date}/fkg/HTMLS/'
 
     def start_requests(self):
+        self.cursor.execute(
+            f"select * from {self.input_table} where status='Pending' and index_id between {self.start_id} and {self.end_id}")
+        results = self.cursor.fetchall()
 
-        for pid in self.pids:
-            if self.is_debug:
-                pid = self.debug_pid
+        headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        }
+        cookies_file = json.loads(
+            open(r'C:\Users\Admin\PycharmProjects\QC\QC\cookies\flipkart_cookies.json', 'r').read())
 
-            headers = {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-            }
-            meta = {
-                'fk_pid' : pid
-            }
-            yield scrapy.Request(
-                url=f'https://www.flipkart.com/p/p/i?pid={pid}&marketplace=GROCERY',
-                headers=headers,
-                cookies=self.cookies,
-                meta=meta
-            )
-            if self.is_debug:
-                break
+        for result in results:
+            id = result[0]
+            pid = result[2]
+            url = f'https://www.flipkart.com/%20/p/%20?pid={pid}&marketplace=GROCERY'
+            pincode = result[1]
+
+            cookies = cookies_file[pincode]
+
+            if not cookies:
+                print('Cookies not present')
+                empty_item = dict()  # Create an instance of QcItem
+                empty_item["comp"] = "Flipkart Grocery"  # Set the company name
+                empty_item['pincode'] = pincode  # Set the pincode
+                empty_item['fk_id'] = pid  # Set the FK ID
+                empty_item['url'] = url  # Set the URL
+                empty_item['name'] = ''  # Set the product name
+                empty_item['mrp'] = ''  # Default empty value for MRP
+                empty_item['discount'] = ''  # Default empty value for discount
+                empty_item['availability'] = ''  # Default empty value for availability
+                empty_item['price'] = ''  # Default empty value for price
+
+                try:
+                    field_list = []
+                    value_list = []
+
+                    for field in empty_item:
+                        field_list.append(str(field))
+                        value_list.append('%s')
+
+                    fields = ','.join(field_list)
+                    values = ", ".join(value_list)
+                    insert_db = f"insert ignore into {db.db_data_table}( " + fields + " ) values ( " + values + " )"
+                    self.cursor.execute(insert_db, tuple(empty_item.values()))
+                    self.con.commit()
+                    print('Data Inserted...')
+
+                    update_query = f"""UPDATE {self.input_table} SET status='unserviceable' WHERE index_id={id}"""
+                    self.cursor.execute(update_query)
+                    self.con.commit()
+                    print('Status Updated')
+
+                except Exception as e:
+                    print(e)
+            else:
+                yield scrapy.Request(
+                    url=url,
+                    headers=headers,
+                    cookies=cookies,
+                    callback=self.parse,
+                    meta={"id": id, "pid": pid, "pincode": pincode},
+                    dont_filter=True
+                )
 
     def parse(self, response, **kwargs):
+        meta = response.meta
 
-        if not os.path.exists(self.page_save_pdp):
-            os.makedirs(self.page_save_pdp)
-        # hash_id = hashlib.sha256(page_name.encode()).hexdigest()
-        open(self.page_save_pdp + response.meta['fk_pid'] + self.pincode + ".html", "w", encoding="utf-8").write(response.text)
+        # if not os.path.exists(self.page_save_pdp):
+        #     os.makedirs(self.page_save_pdp)
+        #     open(self.page_save_pdp + meta['pid'] + meta['pincode'] + ".html", "w", encoding="utf-8").write(
+        #         response.text)
 
         item = QcItem()
-
-        item["platform_name"] = "fkg"
-        item['pincode'] = self.pincode
-        item['fk_id'] = response.meta['fk_pid']
+        item['index_id'] = meta['id']
+        item['comp'] = 'Flipkart Glocery'
+        item['fk_id'] = meta['pid']
+        item['pincode'] = meta['pincode']
         item['url'] = response.url
-        try:
-            raw_data = response.xpath("//script[contains(text(),'__INITIAL_STATE__')]").get()
-            raw_data = raw_data.split('__INITIAL_STATE__ = ')[-1].split(';</script>')[0]
-            data = json.loads(raw_data)
 
-            page_context_json = data['pageDataV4']['page']['pageData']['pageContext']
+        # Extract product name
+        name_data = response.xpath('//h1[@class="_6EBuvT"]/span/text()').getall()
+        item['name'] = html.unescape(''.join(name_data))
+        # Extract price information
+        price_data = response.xpath('//div[@class="hl05eU"]')
+        item['price'] = price_data.xpath(
+            './div[@class="Nx9bqj CxhGGd"]/text()'
+        ).get('').replace('₹', '').replace(',', '')
 
-            try:
-                if page_context_json['pricing']:
-                    try:
-                        item['price'] = page_context_json['pricing']['finalPrice']['decimalValue']
-                    except:
-                        item['price'] = ''
-                    try:
-                        item['discount'] = page_context_json['pricing']['totalDiscount']
-                    except:
-                        item['discount'] = ''
-                    try:
-                        item['mrp'] =  page_context_json['pricing']['mrp']
-                    except:
-                        item['mrp'] = ''
-            except Exception as e:
-                print(e)
+        # Extract MRP (Maximum Retail Price) and format it
+        mrp_data = price_data.xpath('./div[contains(@class, "yRaY8j") and contains(@class, "A6+E6v")]/text()').getall()
+        item['mrp'] = ''.join(mrp_data).replace('₹', '').replace(',', '')
 
-            try:
-                title = page_context_json['titles']['title']
-            except:
-                title = ''
-            try:
-                subtitle = page_context_json['titles']['subtitle']
-            except:
-                subtitle = ''
+        # Extract discount information and clean it up
+        item['discount'] = price_data.xpath('./div[@class="UkUFwK WW8yVX"]/span/text()').get('').replace('off',
+                                                                                         '').strip()
 
-            item['name'] = f"{title} {subtitle}"
+        # Check product availability based on specific text or button presence
+        availability = response.xpath(
+            '//div[contains(text(),"Sold Out") or contains(text(), "Currently Unavailable")]/text() | '
+            '//button[contains(text(), "NOTIFY ME")]/text()'
+        ).get()
 
-            try:
-                productstatus = data['pageDataV4']['page']['pageData']['pageContext']['trackingDataV2']['productStatus']
-            except:
-                productstatus = ""
+        # Set availability status based on the extracted information
+        item['availability'] = availability is None  # True if available, False if sold out
 
-            if "Currently out of stock for" in response.text:
-                availability =  False
-            elif "Coming Soon" in response.text:
-                availability =  False
-            elif productstatus == "Out of Stock":
-                availability =  False
-            elif productstatus == "current":
-                availability =  True
-            else:
-                availability =  False
-
-            item['availability'] = availability
-
-            yield item
-
-        except Exception as e:
-            print(f"ERROR:  {item['fk_id']}", e)
-            yield item
-
+        yield item
 
 
 if __name__ == '__main__':
-    execute(f"scrapy crawl fkg -a pincode=110020".split())
+    execute(f"scrapy crawl fkg -a start_id=0 -a end_id=10".split())

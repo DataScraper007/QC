@@ -10,7 +10,7 @@ from QC.items import QcItem, QcItem_amz
 
 
 class AmzSpider(scrapy.Spider):
-    name = "amz"
+    name = "amz1"
 
     def __init__(self, pincode, **kwargs):
         super().__init__(**kwargs)

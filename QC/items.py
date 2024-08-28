@@ -2,6 +2,7 @@ import scrapy
 
 
 class QcItem(scrapy.Item):
+    index_id = scrapy.Field()
     comp = scrapy.Field()
     fk_id = scrapy.Field()
     pincode = scrapy.Field()

@@ -1,50 +1,26 @@
- start scrapy crawl fkg -a pincode=110020
- start scrapy crawl fkg -a pincode=110059
- start scrapy crawl fkg -a pincode=141001
- start scrapy crawl fkg -a pincode=143413
- start scrapy crawl fkg -a pincode=226003
- start scrapy crawl fkg -a pincode=231312
- start scrapy crawl fkg -a pincode=301001
- start scrapy crawl fkg -a pincode=302017
- start scrapy crawl fkg -a pincode=342001
- start scrapy crawl fkg -a pincode=380015
- start scrapy crawl fkg -a pincode=388355
- start scrapy crawl fkg -a pincode=400012
- start scrapy crawl fkg -a pincode=410203
- start scrapy crawl fkg -a pincode=411014
- start scrapy crawl fkg -a pincode=431001
- start scrapy crawl fkg -a pincode=440013
- start scrapy crawl fkg -a pincode=452001
- start scrapy crawl fkg -a pincode=474001
- start scrapy crawl fkg -a pincode=482002
- start scrapy crawl fkg -a pincode=500008
- start scrapy crawl fkg -a pincode=517501
- start scrapy crawl fkg -a pincode=518002
- start scrapy crawl fkg -a pincode=520007
- start scrapy crawl fkg -a pincode=522646
- start scrapy crawl fkg -a pincode=524002
- start scrapy crawl fkg -a pincode=530016
- start scrapy crawl fkg -a pincode=560030
- start scrapy crawl fkg -a pincode=560037
- start scrapy crawl fkg -a pincode=575001
- start scrapy crawl fkg -a pincode=580003
- start scrapy crawl fkg -a pincode=590001
- start scrapy crawl fkg -a pincode=600031
- start scrapy crawl fkg -a pincode=631551
- start scrapy crawl fkg -a pincode=638056
- start scrapy crawl fkg -a pincode=641028
- start scrapy crawl fkg -a pincode=695013
- start scrapy crawl fkg -a pincode=711107
- start scrapy crawl fkg -a pincode=713212
- start scrapy crawl fkg -a pincode=721102
- start scrapy crawl fkg -a pincode=722107
- start scrapy crawl fkg -a pincode=751001
- start scrapy crawl fkg -a pincode=752023
- start scrapy crawl fkg -a pincode=781011
- start scrapy crawl fkg -a pincode=797112
- start scrapy crawl fkg -a pincode=800001
- start scrapy crawl fkg -a pincode=812001
- start scrapy crawl fkg -a pincode=824302
- start scrapy crawl fkg -a pincode=828117
- start scrapy crawl fkg -a pincode=834002
- start scrapy crawl fkg -a pincode=842001
+start scrapy crawl fkg -a start_id=0 -a end_id=5000
+start scrapy crawl fkg -a start_id=5001 -a end_id=10000
+start scrapy crawl fkg -a start_id=10001 -a end_id=15000
+start scrapy crawl fkg -a start_id=15001 -a end_id=20000
+start scrapy crawl fkg -a start_id=20001 -a end_id=25000
+start scrapy crawl fkg -a start_id=25001 -a end_id=30000
+start scrapy crawl fkg -a start_id=30001 -a end_id=35000
+start scrapy crawl fkg -a start_id=35001 -a end_id=40000
+start scrapy crawl fkg -a start_id=40001 -a end_id=45000
+start scrapy crawl fkg -a start_id=45001 -a end_id=50000
+start scrapy crawl fkg -a start_id=50001 -a end_id=55000
+start scrapy crawl fkg -a start_id=55001 -a end_id=60000
+start scrapy crawl fkg -a start_id=60001 -a end_id=65000
+start scrapy crawl fkg -a start_id=65001 -a end_id=70000
+start scrapy crawl fkg -a start_id=70001 -a end_id=75000
+start scrapy crawl fkg -a start_id=75001 -a end_id=80000
+start scrapy crawl fkg -a start_id=80001 -a end_id=85000
+start scrapy crawl fkg -a start_id=85001 -a end_id=90000
+start scrapy crawl fkg -a start_id=90001 -a end_id=95000
+start scrapy crawl fkg -a start_id=95001 -a end_id=100000
+start scrapy crawl fkg -a start_id=100001 -a end_id=105000
+start scrapy crawl fkg -a start_id=105001 -a end_id=110000
+start scrapy crawl fkg -a start_id=110001 -a end_id=115000
+start scrapy crawl fkg -a start_id=115001 -a end_id=120000
+start scrapy crawl fkg -a start_id=120001 -a end_id=125000
+start scrapy crawl fkg -a start_id=125001 -a end_id=130000

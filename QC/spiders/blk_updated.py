@@ -21,12 +21,13 @@ class BlkUpdatedSpider(scrapy.Spider):
 
         self.con = pymysql.connect(host=db.db_host, user=db.db_user, password=db.db_password, database=db.db_name)
         self.cursor = self.con.cursor()
+        self.input = ''
 
     def start_requests(self):
         # self.cursor.execute(
-        #     f"select index_id, fkg_pid, link, SIZE_BLINKIT, UOM_BLK, Combo_Value_BLINKIT, pincode from mapped_blk_input where status='Pending' and index_id between {self.start_id} and {self.end_id}")
+        # f"select index_id, fkg_pid, link, SIZE_BLINKIT, UOM_BLK, Combo_Value_BLINKIT, pincode from mapped_blk_input where status='Pending' and index_id between {self.start_id} and {self.end_id}")
         self.cursor.execute(
-            f"select index_id, fkg_pid, link, SIZE_BLINKIT, UOM_BLK, Combo_Value_BLINKIT, pincode from mapped_blk_input where index_id = 1120")
+            f"select index_id, fkg_pid, link, SIZE_BLINKIT, UOM_BLK, Combo_Value_BLINKIT, pincode from mapped_blk_input where index_id = 1252")
         results = self.cursor.fetchall()
 
         cookies_file = json.loads(
@@ -190,26 +191,16 @@ class BlkUpdatedSpider(scrapy.Spider):
             if variants:
                 for variant in variants:
                     # Extract the numeric part of the size/unit from the variant information
-                    size_and_uom = variant['unit'].split('x')
-                    combo = None
-                    size = None
-
+                    size_and_uom = None
                     combo_status = True
+                    combo_structure = True
 
-                    if '(' in variant['unit'] and ')' in variant['unit']:
-                        item['availability'] = variant.get('inventory', 0) > 0
-                        # Set availability status based on inventory
-                        item['availability'] = variant.get('inventory', 0) > 0
-                        item['name'] = variant.get('name', '')  # Set product name
+                    if '(' in variant['unit'] and ')' in variant['unit'] or '+' in variant['unit']:
+                        combo_structure = False
+                    else:
+                        size_and_uom = variant['unit'].split('x')
 
-                        # If the product is available, populate price, MRP, and discount details
-                        if item['availability']:
-                            item['price'] = variant.get('price', '')
-                            item['mrp'] = variant.get('mrp', '')
-                            item['discount'] = variant.get('offer', '').replace(' OFF', '')
-                        break
-
-                    if len(size_and_uom) > 1:
+                    if size_and_uom and len(size_and_uom) > 1:
                         combo = float(size_and_uom[0].strip())
                         size = self.extract_numeric_value(size_and_uom[1].strip())
 
@@ -223,7 +214,19 @@ class BlkUpdatedSpider(scrapy.Spider):
                         size = self.extract_numeric_value(variant['unit'])
 
                     # Validate the extracted unit against the expected size from database
-                    if size == meta['size'] and combo_status:
+                    if size == meta['size'] and combo_status and combo_structure:
+                        # Set availability status based on inventory
+                        item['availability'] = variant.get('inventory', 0) > 0
+                        item['name'] = variant.get('name', '')  # Set product name
+
+                        # If the product is available, populate price, MRP, and discount details
+                        if item['availability']:
+                            item['price'] = variant.get('price', '')
+                            item['mrp'] = variant.get('mrp', '')
+                            item['discount'] = variant.get('offer', '').replace(' OFF', '')
+                        break  # Exit loop once the matching variant is found
+                    else:
+                        # If size and uom not matching then default variant fetched
                         # Set availability status based on inventory
                         item['availability'] = variant.get('inventory', 0) > 0
                         item['name'] = variant.get('name', '')  # Set product name
